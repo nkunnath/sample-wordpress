@@ -10,14 +10,12 @@ spec:
   selector:
     matchLabels:
       app: wordpress
-      tier: frontend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: wordpress
-        tier: frontend
     spec:
       containers:
       - image: docker.io/bitnami/mariadb:10.6
