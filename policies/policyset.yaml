@@ -1,0 +1,39 @@
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: policyset-acm-csi
+  namespace: acm-csi-demo
+spec:
+  description: "Policyset to enforce three policies for Nutanix CSI Operator"
+  policies:
+    - policy-acm-csi-operatorgroup
+    - policy-acm-csi-subscription
+    - policy-acm-csi-nutanixcsistorage
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: policyset-placementrule
+  namespace: acm-csi-demo
+spec:
+  clusterSelector:
+    matchExpressions:
+      - key: name
+        operator: In
+        values:
+          - local-cluster
+  clusterConditions: []
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: policyset-placementbinding
+  namespace: acm-csi-demo
+placementRef:
+  name: policyset-placementrule
+  apiGroup: apps.open-cluster-management.io
+  kind: PlacementRule
+subjects:
+  - name: policyset-acm-csi
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
