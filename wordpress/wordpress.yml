@@ -1,4 +1,16 @@
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: md-pv-claim
+  labels:
+    app: wordpress
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -47,8 +59,11 @@ spec:
           value: "bn_wordpress"
         ports:
         - containerPort: 8080
+          name: wordpress
         - containerPort: 8443
+          name: wordpress-2
         - containerPort: 3306
+          name: mariadb
         volumeMounts:
         - name: wordpress-persistent-storage
           mountPath: /bitnami/wordpress
